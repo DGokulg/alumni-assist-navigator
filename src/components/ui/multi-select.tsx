@@ -41,17 +41,21 @@ export function MultiSelect({
           onChange(selected.slice(0, -1))
         }
       }
-      // Allow copy and paste
-      if ((e.ctrlKey || e.metaKey) && e.key === "v") {
-        const pastedValue = e.clipboardData?.getData("text")
-        if (pastedValue) {
-          const values = pastedValue
-            .split(",")
-            .map((v) => v.trim())
-            .filter((v) => v.length > 0)
-          onChange([...selected, ...values])
-        }
-      }
+      
+      // For paste operations, we need to use onPaste instead of checking for Ctrl+V here
+      // as clipboardData is not available on KeyboardEvent
+    }
+  }
+  
+  // Handle paste events separately with the correct event type
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const pastedValue = e.clipboardData?.getData("text")
+    if (pastedValue) {
+      const values = pastedValue
+        .split(",")
+        .map((v) => v.trim())
+        .filter((v) => v.length > 0)
+      onChange([...selected, ...values])
     }
   }
 
@@ -60,6 +64,7 @@ export function MultiSelect({
   return (
     <Command
       onKeyDown={handleKeyDown}
+      onPaste={handlePaste}
       className={`overflow-visible bg-transparent ${className}`}
     >
       <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
