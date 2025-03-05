@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { DashboardShell } from "@/components/layouts/dashboard-shell";
+import DashboardShell from "@/components/layouts/dashboard-shell";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
