@@ -1,12 +1,27 @@
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAuth, StudentData } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Search, Send } from "lucide-react";
+import { 
+  Search, 
+  Send, 
+  Filter, 
+  Check, 
+  GraduationCap, 
+  BookOpen, 
+  Briefcase 
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const MessagingDashboard = () => {
   const { getStudents, messageStudents } = useAuth();
@@ -14,15 +29,50 @@ const MessagingDashboard = () => {
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [messageText, setMessageText] = useState("");
   const [messageLink, setMessageLink] = useState("");
+  
+  // New filter states
+  const [departmentFilter, setDepartmentFilter] = useState<string>("");
+  const [batchFilter, setBatchFilter] = useState<string>("");
+  const [placementFilter, setPlacementFilter] = useState<string>("");
 
   const students = getStudents().filter(student => student.isApproved);
   
-  const filteredStudents = students.filter(student => 
-    student.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.batch.toLowerCase().includes(searchTerm.toLowerCase())
+  // Extract unique departments and batches for filter dropdowns
+  const departments = useMemo(() => 
+    Array.from(new Set(students.map(student => student.department))),
+    [students]
   );
+  
+  const batches = useMemo(() => 
+    Array.from(new Set(students.map(student => student.batch))),
+    [students]
+  );
+
+  // Apply all filters
+  const filteredStudents = useMemo(() => {
+    return students.filter(student => {
+      // Search filter
+      const matchesSearch = 
+        student.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.batch.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // Department filter
+      const matchesDepartment = !departmentFilter || student.department === departmentFilter;
+      
+      // Batch filter
+      const matchesBatch = !batchFilter || student.batch === batchFilter;
+      
+      // Placement status filter
+      const matchesPlacement = 
+        !placementFilter || 
+        (placementFilter === "placed" && student.isPlaced) ||
+        (placementFilter === "not-placed" && !student.isPlaced);
+      
+      return matchesSearch && matchesDepartment && matchesBatch && matchesPlacement;
+    });
+  }, [students, searchTerm, departmentFilter, batchFilter, placementFilter]);
 
   const handleSelectAll = () => {
     if (selectedStudents.length === filteredStudents.length) {
@@ -66,6 +116,13 @@ const MessagingDashboard = () => {
       title: "Success",
       description: `Message sent to ${selectedStudents.length} student(s)`,
     });
+  };
+
+  const clearFilters = () => {
+    setDepartmentFilter("");
+    setBatchFilter("");
+    setPlacementFilter("");
+    setSearchTerm("");
   };
 
   return (
@@ -137,6 +194,72 @@ const MessagingDashboard = () => {
             </div>
           </CardHeader>
           <CardContent>
+            <div className="mb-4 p-3 border rounded-md bg-muted/40">
+              <div className="flex flex-col md:flex-row gap-3 items-start md:items-end">
+                <div className="w-full md:w-auto">
+                  <Label htmlFor="department-filter" className="text-sm mb-1 block">
+                    <GraduationCap className="h-4 w-4 inline mr-1" />
+                    Department
+                  </Label>
+                  <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+                    <SelectTrigger id="department-filter" className="w-full md:w-[180px]">
+                      <SelectValue placeholder="All Departments" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Departments</SelectItem>
+                      {departments.map(dept => (
+                        <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="w-full md:w-auto">
+                  <Label htmlFor="batch-filter" className="text-sm mb-1 block">
+                    <BookOpen className="h-4 w-4 inline mr-1" />
+                    Batch
+                  </Label>
+                  <Select value={batchFilter} onValueChange={setBatchFilter}>
+                    <SelectTrigger id="batch-filter" className="w-full md:w-[180px]">
+                      <SelectValue placeholder="All Batches" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Batches</SelectItem>
+                      {batches.map(batch => (
+                        <SelectItem key={batch} value={batch}>{batch}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="w-full md:w-auto">
+                  <Label htmlFor="placement-filter" className="text-sm mb-1 block">
+                    <Briefcase className="h-4 w-4 inline mr-1" />
+                    Placement Status
+                  </Label>
+                  <Select value={placementFilter} onValueChange={setPlacementFilter}>
+                    <SelectTrigger id="placement-filter" className="w-full md:w-[180px]">
+                      <SelectValue placeholder="All Students" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Students</SelectItem>
+                      <SelectItem value="placed">Placed</SelectItem>
+                      <SelectItem value="not-placed">Not Placed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={clearFilters}
+                  className="w-full md:w-auto mt-2 md:mt-0"
+                >
+                  <Filter className="h-4 w-4 mr-2" /> Clear Filters
+                </Button>
+              </div>
+            </div>
+            
             <div className="border rounded-md overflow-hidden">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -172,6 +295,9 @@ const MessagingDashboard = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">{student.name}</div>
+                          <div className="md:hidden text-xs text-gray-500">
+                            {student.email}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
                           <div className="text-sm text-gray-500">{student.email}</div>
@@ -181,6 +307,11 @@ const MessagingDashboard = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap hidden lg:table-cell">
                           <div className="text-sm text-gray-500">{student.batch}</div>
+                          {student.isPlaced && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                              <Check className="h-3 w-3 mr-1" /> Placed
+                            </span>
+                          )}
                         </td>
                       </tr>
                     ))
