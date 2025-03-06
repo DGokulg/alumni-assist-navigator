@@ -1,7 +1,7 @@
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, StudentData } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import DashboardShell from "@/components/layouts/dashboard-shell";
@@ -16,6 +16,11 @@ import ReportsDashboard from "@/components/admin/reports-dashboard";
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  // Type guard function to check if user is a student
+  const isStudentUser = (user: any): user is StudentData => {
+    return user?.role === "student" && 'registerNumber' in user;
+  };
 
   useEffect(() => {
     if (!user) {
@@ -130,7 +135,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
-                {user.role === "student" && (
+                {isStudentUser(user) && (
                   <div>
                     <h3 className="text-lg font-medium mb-2">Academic Information</h3>
                     <div className="space-y-2">
@@ -257,3 +262,4 @@ const PendingApprovals = () => {
 };
 
 export default Dashboard;
+
