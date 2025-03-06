@@ -206,7 +206,7 @@ const MessagingDashboard = () => {
                       <SelectValue placeholder="All Departments" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Departments</SelectItem>
+                      <SelectItem value="all-departments">All Departments</SelectItem>
                       {departments.map(dept => (
                         <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                       ))}
@@ -224,7 +224,7 @@ const MessagingDashboard = () => {
                       <SelectValue placeholder="All Batches" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Batches</SelectItem>
+                      <SelectItem value="all-batches">All Batches</SelectItem>
                       {batches.map(batch => (
                         <SelectItem key={batch} value={batch}>{batch}</SelectItem>
                       ))}
@@ -242,7 +242,7 @@ const MessagingDashboard = () => {
                       <SelectValue placeholder="All Students" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Students</SelectItem>
+                      <SelectItem value="all-students">All Students</SelectItem>
                       <SelectItem value="placed">Placed</SelectItem>
                       <SelectItem value="not-placed">Not Placed</SelectItem>
                     </SelectContent>
