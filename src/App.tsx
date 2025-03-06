@@ -24,8 +24,21 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            
+            {/* Student Routes */}
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Dashboard />} />
+            <Route path="/students" element={<Dashboard />} />
+            <Route path="/messages" element={<Dashboard />} />
+            
+            {/* Admin Routes */}
             <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/students" element={<Dashboard />} />
+            <Route path="/admin/analytics" element={<Dashboard />} />
+            <Route path="/admin/messaging" element={<Dashboard />} />
+            <Route path="/admin/placement-tracking" element={<Dashboard />} />
+            <Route path="/admin/reports" element={<Dashboard />} />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -36,3 +49,4 @@ const App = () => (
 );
 
 export default App;
+
