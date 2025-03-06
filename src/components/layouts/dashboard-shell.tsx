@@ -120,17 +120,17 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0">
-          <div className="h-full flex flex-col border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="h-full flex flex-col bg-gradient-to-b from-indigo-900 to-purple-900 text-white">
             <div className="flex h-14 items-center px-4 py-6">
               <Link
                 to={isStudent ? "/dashboard" : "/admin"}
                 className="flex items-center gap-2 font-semibold"
               >
-                <BookOpen className="h-6 w-6" />
-                <span className="text-xl font-bold">PlaceAssist</span>
+                <BookOpen className="h-6 w-6 text-white" />
+                <span className="text-xl font-bold text-white">PlaceAssist</span>
               </Link>
             </div>
-            <Separator />
+            <Separator className="bg-indigo-700" />
 
             <div className="flex-1 overflow-auto py-2">
               <nav className="grid items-start px-2 text-sm font-medium">
@@ -139,10 +139,10 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
                     key={index}
                     to={item.href}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-indigo-100 transition-all hover:text-white",
                       location.pathname === item.href 
-                        ? "bg-accent text-accent-foreground" 
-                        : "hover:bg-accent/50"
+                        ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white" 
+                        : "hover:bg-indigo-800/50"
                     )}
                   >
                     <item.icon className="h-4 w-4" />
@@ -155,15 +155,15 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
             <div className="mt-auto p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 bg-indigo-300 text-indigo-900">
                     <AvatarImage src="" />
                     <AvatarFallback>
                       {user?.name ? getInitials(user.name) : "U"}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-medium">{user?.name}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm font-medium text-white">{user?.name}</p>
+                    <p className="text-xs text-indigo-200">
                       {user?.email}
                     </p>
                   </div>
@@ -172,7 +172,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
                   variant="ghost"
                   size="icon"
                   onClick={handleLogout}
-                  className="ml-auto"
+                  className="ml-auto text-indigo-200 hover:text-white hover:bg-indigo-800"
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -185,7 +185,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
       {/* Desktop Sidebar */}
       <div
         className={cn(
-          "hidden lg:flex h-screen flex-col border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300",
+          "hidden lg:flex h-screen flex-col bg-gradient-to-b from-indigo-900 to-purple-900 text-white transition-all duration-300",
           collapsed ? "w-[80px]" : "w-[280px]"
         )}
       >
@@ -198,18 +198,18 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
               to={isStudent ? "/dashboard" : "/admin"}
               className="flex items-center gap-2 font-semibold"
             >
-              <BookOpen className="h-6 w-6" />
-              <span className="text-xl font-bold">PlaceAssist</span>
+              <BookOpen className="h-6 w-6 text-white" />
+              <span className="text-xl font-bold text-white">PlaceAssist</span>
             </Link>
           )}
           {collapsed && (
-            <BookOpen className="h-6 w-6" />
+            <BookOpen className="h-6 w-6 text-white" />
           )}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setCollapsed(!collapsed)}
-            className="ml-auto h-8 w-8"
+            className="ml-auto h-8 w-8 text-indigo-200 hover:text-white hover:bg-indigo-800"
           >
             {collapsed ? (
               <ChevronRight className="h-4 w-4" />
@@ -218,7 +218,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
             )}
           </Button>
         </div>
-        <Separator />
+        <Separator className="bg-indigo-700" />
 
         <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-2 text-sm font-medium">
@@ -227,10 +227,10 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
                 key={index}
                 to={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-indigo-100 transition-all hover:text-white",
                   location.pathname === item.href 
-                    ? "bg-accent text-accent-foreground" 
-                    : "hover:bg-accent/50",
+                    ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white" 
+                    : "hover:bg-indigo-800/50",
                   collapsed ? "justify-center" : ""
                 )}
               >
@@ -241,7 +241,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
           </nav>
         </div>
 
-        <div className="mt-auto p-4">
+        <div className="mt-auto p-4 border-t border-indigo-700">
           <div className={cn(
             "flex items-center", 
             collapsed ? "justify-center" : "justify-between"
@@ -249,15 +249,15 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
             {!collapsed ? (
               <>
                 <div className="flex items-center gap-2">
-                  <Avatar className="h-9 w-9">
+                  <Avatar className="h-9 w-9 bg-indigo-300 text-indigo-900">
                     <AvatarImage src="" />
                     <AvatarFallback>
                       {user?.name ? getInitials(user.name) : "U"}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-medium">{user?.name}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm font-medium text-white">{user?.name}</p>
+                    <p className="text-xs text-indigo-200">
                       {user?.email}
                     </p>
                   </div>
@@ -266,7 +266,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
                   variant="ghost"
                   size="icon"
                   onClick={handleLogout}
-                  className="ml-auto"
+                  className="ml-auto text-indigo-200 hover:text-white hover:bg-indigo-800"
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -276,6 +276,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
                 variant="ghost"
                 size="icon"
                 onClick={handleLogout}
+                className="text-indigo-200 hover:text-white hover:bg-indigo-800"
               >
                 <LogOut className="h-4 w-4" />
               </Button>
@@ -285,7 +286,7 @@ const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto bg-background">
+      <main className="flex-1 overflow-auto bg-gradient-to-br from-blue-50 to-purple-50">
         {children}
       </main>
     </div>
